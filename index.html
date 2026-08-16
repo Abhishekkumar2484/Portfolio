@@ -1,0 +1,676 @@
+1<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhishek Kumar — DevOps Engineer</title>
+<meta name="description" content="Abhishek Kumar — DevOps Engineer specializing in AWS, Infrastructure as Code, CI/CD automation and cloud reliability.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23131522'/%3E%3Ctext x='50' y='68' font-family='monospace' font-size='58' font-weight='700' fill='%2378d9e0' text-anchor='middle'%3E%3E_%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: oklch(0.13 0.02 262);
+    --bg-card: oklch(0.19 0.025 262 / 0.6);
+    --bg-card-solid: oklch(0.19 0.025 262);
+    --text: oklch(0.95 0.006 262);
+    --text-dim: oklch(0.83 0.01 262);
+    --text-muted: oklch(0.68 0.02 262);
+    --text-faint: oklch(0.5 0.02 262);
+    --cyan: oklch(0.78 0.17 195);
+    --cyan-bright: oklch(0.85 0.15 195);
+    --purple: oklch(0.65 0.2 300);
+    --purple-bright: oklch(0.72 0.18 300);
+    --border-cyan: oklch(0.78 0.17 195 / 0.2);
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;}
+  ::selection{background:var(--cyan-bright);color:oklch(0.1 0.02 262);}
+  a{color:var(--cyan);text-decoration:none;}
+  a:hover{color:var(--cyan-bright);}
+  img{max-width:100%;}
+
+  @keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+  @keyframes pulseglow{0%,100%{opacity:0.5;}50%{opacity:1;}}
+  @keyframes scan{0%{transform:translateY(-100%);}100%{transform:translateY(100%);}}
+  @keyframes seam{0%,100%{opacity:0.45;}50%{opacity:1;}}
+  @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+  #bg-tunnel{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:0.55;pointer-events:none;}
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 45%, transparent 25%, oklch(0.13 0.02 262 / 0.75) 75%);}
+
+  /* ---------- GATE ---------- */
+  .gate{position:fixed;inset:0;z-index:100;display:block;opacity:1;transition:opacity 0.7s ease 0.9s;pointer-events:auto;}
+  .gate.gone{display:none;}
+  .door{position:absolute;top:0;width:50.2%;height:100%;background-color:oklch(0.15 0.025 262);
+    background-image:linear-gradient(oklch(0.3 0.05 262 / 0.55) 1px, transparent 1px),linear-gradient(90deg, oklch(0.3 0.05 262 / 0.55) 1px, transparent 1px);
+    background-size:52px 52px, 52px 52px;transition:transform 1.5s cubic-bezier(0.76,0,0.24,1);}
+  .door-left{left:0;transform:translateX(0);background-image:linear-gradient(oklch(0.3 0.05 262 / 0.55) 1px, transparent 1px),linear-gradient(90deg, oklch(0.3 0.05 262 / 0.55) 1px, transparent 1px),linear-gradient(100deg, oklch(0.14 0.02 262), oklch(0.19 0.03 262));
+    background-size:52px 52px, 52px 52px, auto;border-right:1px solid oklch(0.78 0.17 195 / 0.6);box-shadow:inset -40px 0 80px -40px oklch(0.78 0.17 195 / 0.35);display:flex;align-items:center;justify-content:flex-end;}
+  .door-right{right:0;transform:translateX(0);background-image:linear-gradient(oklch(0.3 0.05 262 / 0.55) 1px, transparent 1px),linear-gradient(90deg, oklch(0.3 0.05 262 / 0.55) 1px, transparent 1px),linear-gradient(260deg, oklch(0.14 0.02 262), oklch(0.19 0.03 262));
+    background-size:52px 52px, 52px 52px, auto;border-left:1px solid oklch(0.65 0.2 300 / 0.6);box-shadow:inset 40px 0 80px -40px oklch(0.65 0.2 300 / 0.35);display:flex;align-items:center;}
+  .gate.entered .door-left{transform:translateX(-101%);}
+  .gate.entered .door-right{transform:translateX(101%);}
+  .handle{position:absolute;top:50%;width:6px;height:82px;margin-top:-41px;border-radius:3px;}
+  .handle-left{right:26px;background:linear-gradient(180deg, oklch(0.85 0.15 195), oklch(0.55 0.1 195));box-shadow:0 0 18px -2px oklch(0.8 0.17 195 / 0.8);}
+  .handle-right{left:26px;background:linear-gradient(180deg, oklch(0.78 0.18 300), oklch(0.5 0.12 300));box-shadow:0 0 18px -2px oklch(0.68 0.2 300 / 0.8);}
+  .seam{position:absolute;top:0;left:50%;width:2px;height:100%;margin-left:-1px;
+    background:linear-gradient(180deg, transparent, oklch(0.85 0.17 195), oklch(0.7 0.2 300), transparent);
+    animation:seam 2.4s ease-in-out infinite;opacity:1;transition:opacity 0.5s ease;}
+  .gate.entered .seam{opacity:0;}
+  .boot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;opacity:1;transition:opacity 0.5s ease;padding:24px;}
+  .gate.entered .boot{opacity:0;}
+  .boot-name{font-family:var(--font-display);font-size:13px;letter-spacing:0.35em;color:oklch(0.7 0.15 195);text-transform:uppercase;}
+  .terminal{width:min(520px, 84vw);background:oklch(0.16 0.025 262 / 0.85);backdrop-filter:blur(10px);border:1px solid oklch(0.78 0.17 195 / 0.35);
+    border-radius:12px;padding:22px 24px;box-shadow:0 0 60px -14px oklch(0.75 0.18 210 / 0.6);}
+  .terminal-dots{display:flex;gap:6px;margin-bottom:16px;}
+  .terminal-dots span{width:9px;height:9px;border-radius:50%;display:block;}
+  .terminal-dots span:nth-child(1){background:oklch(0.68 0.2 25);}
+  .terminal-dots span:nth-child(2){background:oklch(0.78 0.16 90);}
+  .terminal-dots span:nth-child(3){background:oklch(0.78 0.17 195);}
+  .boot-lines{display:flex;flex-direction:column;gap:9px;min-height:132px;}
+  .boot-line{font-family:var(--font-mono);font-size:13.5px;line-height:1.4;opacity:0;animation:fadeIn 0.3s ease forwards;}
+  @keyframes fadeIn{to{opacity:1;}}
+  .cursor{font-family:var(--font-mono);font-size:13.5px;color:var(--cyan);animation:blink 1s step-end infinite;}
+  .enter-btn{font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;
+    border:1px solid oklch(0.85 0.17 195 / 0.6);border-radius:8px;padding:15px 34px;color:oklch(0.1 0.02 262);
+    background:linear-gradient(120deg, oklch(0.82 0.17 195), oklch(0.68 0.2 300));box-shadow:0 0 40px -8px oklch(0.78 0.18 210 / 0.8);
+    opacity:0;transform:translateY(10px);transition:opacity 0.6s ease, transform 0.6s ease;animation:floatY 3.4s ease-in-out infinite;}
+  .enter-btn.ready{opacity:1;transform:translateY(0);}
+  .press-hint{font-family:var(--font-mono);font-size:11.5px;color:var(--text-faint);letter-spacing:0.05em;}
+
+  /* ---------- PAGE ---------- */
+  .page{position:relative;z-index:2;transform:scale(1.07);filter:blur(3px);transition:transform 1.6s cubic-bezier(0.22,1,0.36,1), filter 1.4s ease;transform-origin:50% 30%;}
+  .page.entered{transform:scale(1);filter:blur(0px);}
+
+  .nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:18px 48px;background:oklch(0.13 0.02 262 / 0.72);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-cyan);flex-wrap:wrap;gap:12px;}
+  .nav-brand{font-family:var(--font-mono);font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px 2px oklch(0.78 0.17 195 / 0.8);display:inline-block;animation:pulseglow 2s ease-in-out infinite;}
+  .nav-links{display:flex;gap:28px;align-items:center;font-size:14px;font-weight:500;color:var(--text-muted);flex-wrap:wrap;}
+  .nav-links a{color:inherit;}
+  .replay-btn{font-family:var(--font-mono);font-size:12px;cursor:pointer;background:transparent;border:1px solid oklch(0.78 0.17 195 / 0.35);color:var(--cyan);padding:6px 12px;border-radius:6px;}
+
+  section, header.hero{max-width:920px;margin:0 auto;padding:48px 48px 100px;
+    background-image:linear-gradient(90deg, oklch(0.78 0.17 195 / 0.5), oklch(0.65 0.2 300 / 0.3), transparent);
+    background-size:100% 1px;background-position:top;background-repeat:no-repeat;}
+
+  .section-label{font-family:var(--font-mono);font-size:13px;color:var(--cyan);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:28px;text-shadow:0 0 10px oklch(0.78 0.17 195 / 0.5);}
+
+  /* HERO */
+  .hero{max-width:1100px;position:relative;overflow:hidden;padding-top:120px;padding-bottom:120px;background:none;}
+  .hero-glow-a{position:absolute;top:-160px;left:-120px;width:520px;height:520px;background:radial-gradient(circle, oklch(0.7 0.18 195 / 0.2), transparent 70%);filter:blur(10px);pointer-events:none;}
+  .hero-glow-b{position:absolute;bottom:-220px;right:-160px;width:600px;height:600px;background:radial-gradient(circle, oklch(0.6 0.22 300 / 0.18), transparent 70%);filter:blur(10px);pointer-events:none;}
+  .hero-scan{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, transparent, oklch(0.78 0.17 195 / 0.5), transparent);animation:scan 7s linear infinite;pointer-events:none;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.9fr;gap:56px;align-items:center;position:relative;}
+  .hero-eyebrow{font-family:var(--font-mono);font-size:15px;color:var(--cyan);margin-bottom:20px;text-shadow:0 0 12px oklch(0.78 0.17 195 / 0.6);}
+  .hero h1{font-family:var(--font-display);font-size:52px;font-weight:800;line-height:1.12;margin:0 0 18px;letter-spacing:0.01em;
+    background:linear-gradient(120deg, oklch(0.96 0.006 262) 30%, oklch(0.8 0.17 195), oklch(0.68 0.2 300));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px oklch(0.7 0.15 210 / 0.35));}
+  .hero-role{font-family:var(--font-mono);font-size:18px;color:var(--text-muted);margin-bottom:26px;}
+  .hero-desc{font-size:17px;line-height:1.7;color:var(--text-dim);max-width:520px;margin:0 0 32px;}
+  .hero-stats{display:flex;gap:24px;flex-wrap:wrap;margin:0 0 34px;}
+  .stat{border-left:1px solid oklch(0.78 0.17 195 / 0.45);padding-left:14px;}
+  .stat-value{font-family:var(--font-display);font-size:22px;font-weight:700;color:oklch(0.9 0.09 195);}
+  .stat-label{font-family:var(--font-mono);font-size:11.5px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .btn-primary{font-family:var(--font-mono);font-size:14px;font-weight:600;background:linear-gradient(120deg, var(--cyan), var(--purple));color:oklch(0.1 0.02 262);padding:12px 22px;border-radius:6px;white-space:nowrap;box-shadow:0 0 24px -4px oklch(0.75 0.18 210 / 0.6);}
+  .btn-primary:hover{color:oklch(0.05 0.02 262);}
+  .btn-secondary{font-family:var(--font-mono);font-size:14px;font-weight:500;border:1px solid oklch(0.78 0.17 195 / 0.4);color:var(--text);padding:12px 22px;border-radius:6px;white-space:nowrap;background:oklch(0.2 0.03 262 / 0.4);}
+  .hero-location{font-size:13px;color:var(--text-faint);margin-left:8px;}
+
+  /* HERO 3D STACK */
+  .stack-wrap{perspective:1400px;}
+  .stack{position:relative;height:440px;transform:rotateX(8deg) rotateY(-14deg);transform-style:preserve-3d;}
+  .layer-card{position:absolute;top:0;left:0;background:oklch(0.2 0.025 262 / 0.55);backdrop-filter:blur(6px);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;justify-content:flex-end;}
+  .layer-os{width:78%;height:52%;transform:translate3d(130px,206px,-90px);border:1px solid oklch(0.65 0.2 300 / 0.35);box-shadow:0 30px 60px -20px oklch(0.02 0 0 / 0.7), 0 0 30px -8px oklch(0.65 0.2 300 / 0.4);}
+  .layer-pipeline{width:82%;height:56%;transform:translate3d(70px,110px,-45px);background:oklch(0.22 0.025 262 / 0.6);border:1px solid oklch(0.78 0.17 195 / 0.35);box-shadow:0 30px 60px -18px oklch(0.02 0 0 / 0.7), 0 0 30px -8px oklch(0.78 0.17 195 / 0.4);padding:20px 22px;}
+  .layer-infra{width:88%;height:62%;transform:translate3d(0,0,0);background:oklch(0.19 0.025 262 / 0.78);border:1px solid oklch(0.78 0.17 195 / 0.55);box-shadow:0 40px 80px -16px oklch(0.02 0 0 / 0.8), 0 0 44px -6px oklch(0.78 0.17 195 / 0.5);padding:20px 22px;backdrop-filter:blur(8px);}
+  .layer-tag{font-family:var(--font-mono);font-size:12px;letter-spacing:0.06em;}
+  .layer-os .layer-tag{color:oklch(0.72 0.15 300);}
+  .layer-pipeline .layer-tag{color:oklch(0.78 0.15 195);}
+  .layer-body{font-family:var(--font-mono);font-size:14px;color:oklch(0.85 0.01 262);margin-top:6px;}
+  .layer-infra .layer-tag{color:var(--cyan);text-shadow:0 0 10px oklch(0.78 0.17 195 / 0.6);}
+  .layer-infra .layer-body{color:oklch(0.92 0.006 262);}
+  .layer-dots{display:flex;gap:6px;margin-bottom:14px;}
+  .layer-dots span{width:10px;height:10px;border-radius:50%;display:block;}
+  .layer-dots span:nth-child(1){background:oklch(0.68 0.2 25);box-shadow:0 0 8px oklch(0.68 0.2 25 / 0.7);}
+  .layer-dots span:nth-child(2){background:oklch(0.78 0.16 90);box-shadow:0 0 8px oklch(0.78 0.16 90 / 0.7);}
+  .layer-dots span:nth-child(3){background:var(--cyan);box-shadow:0 0 8px oklch(0.78 0.17 195 / 0.7);}
+  #metrics-canvas{width:100%;height:64px;margin-top:12px;display:block;}
+  .layer-cmd{font-family:var(--font-mono);font-size:12.5px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:48px;align-items:center;}
+  .about-text{font-size:18px;line-height:1.75;color:var(--text-dim);margin:0;}
+  .iso-wrap{perspective:1000px;padding:24px 0;display:flex;justify-content:center;}
+  .iso-stack{position:relative;width:150px;height:360px;transform:rotateX(52deg) rotateZ(45deg);transform-style:preserve-3d;}
+  .iso-layer{position:absolute;top:140px;left:0;width:150px;height:150px;border:1px solid oklch(0.9 0.05 195 / 0.45);box-shadow:0 0 26px -4px oklch(0.78 0.17 195 / 0.4), 0 0 0 1px oklch(0.05 0 0 / 0.35);transform-style:preserve-3d;}
+  .iso-label{position:absolute;left:100%;top:50%;transform-origin:left center;transform:rotateZ(-45deg) rotateX(-52deg);font-family:var(--font-mono);font-size:12.5px;font-weight:700;letter-spacing:0.08em;white-space:nowrap;padding-left:58px;text-shadow:0 0 12px oklch(0.1 0.02 262);}
+
+  /* SKILLS */
+  .skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;}
+  .skill-card{background:var(--bg-card);backdrop-filter:blur(6px);border:1px solid var(--border-cyan);border-radius:10px;padding:22px 24px;
+    transform:perspective(600px) rotateX(0deg);transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;}
+  .skill-card:hover{transform:perspective(600px) rotateX(4deg) translateY(-4px);box-shadow:0 20px 30px -12px oklch(0.02 0 0 / 0.6), 0 0 30px -6px oklch(0.78 0.17 195 / 0.35);border-color:oklch(0.78 0.17 195 / 0.5);}
+  .skill-title{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;}
+  .skill-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .skill-tag{font-size:13px;font-family:var(--font-mono);background:oklch(0.13 0.02 262 / 0.7);border:1px solid oklch(0.78 0.17 195 / 0.25);color:var(--text-dim);padding:5px 10px;border-radius:5px;}
+
+  /* EXPERIENCE */
+  .exp-list{display:flex;flex-direction:column;gap:36px;}
+  .exp-row{display:grid;grid-template-columns:200px 1fr;gap:24px;}
+  .exp-period{font-family:var(--font-mono);font-size:13px;color:var(--text-faint);padding-top:2px;}
+  .exp-role{font-size:19px;font-weight:700;margin-bottom:2px;}
+  .exp-company{font-family:var(--font-mono);font-size:14px;color:var(--cyan);margin-bottom:14px;}
+  .bullets{display:flex;flex-direction:column;gap:8px;}
+  .bullet{display:flex;gap:10px;font-size:15px;line-height:1.6;color:var(--text-dim);}
+  .bullet-mark{color:var(--cyan);flex-shrink:0;}
+
+  /* PROJECTS */
+  .project-list{display:flex;flex-direction:column;gap:20px;}
+  .project-card{background:var(--bg-card);backdrop-filter:blur(6px);border:1px solid var(--border-cyan);border-radius:10px;padding:26px 28px;
+    transform:perspective(800px) rotateX(0deg);transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;}
+  .project-card:hover{transform:perspective(800px) rotateX(3deg) translateY(-5px);box-shadow:0 24px 36px -14px oklch(0.02 0 0 / 0.6), 0 0 34px -6px oklch(0.65 0.2 300 / 0.4);border-color:oklch(0.65 0.2 300 / 0.5);}
+  .project-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .project-name{font-family:var(--font-mono);font-size:16px;font-weight:700;}
+  .project-sub{font-size:13px;color:var(--text-faint);}
+  .project-bullets{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+
+  /* EDU */
+  .edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  .edu-title{font-size:16px;font-weight:700;margin-bottom:4px;}
+  .edu-sub{font-size:14px;color:var(--text-muted);}
+
+  /* CONTACT */
+  .contact{padding-top:60px;padding-bottom:120px;}
+  .contact h2{font-family:var(--font-display);font-size:32px;font-weight:800;margin:0 0 18px;letter-spacing:0.005em;line-height:1.35;}
+  .contact p{font-size:16px;color:var(--text-dim);margin:0 0 32px;}
+  .contact-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .footer-note{margin-top:60px;font-family:var(--font-mono);font-size:12px;color:var(--text-faint);}
+
+  @media (max-width:900px){
+    section, header.hero{padding-left:24px;padding-right:24px;}
+    .nav{padding:16px 24px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .stack-wrap{display:none;}
+    .about-grid{grid-template-columns:1fr;}
+    .iso-wrap{display:none;}
+    .skills-grid{grid-template-columns:1fr;}
+    .exp-row{grid-template-columns:1fr;}
+    .edu-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:38px;}
+    .nav-links{font-size:13px;gap:16px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .cursor, .nav-dot, .hero-scan, .seam, .enter-btn{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-tunnel"></canvas>
+<div class="vignette"></div>
+
+<!-- ENTRY GATE -->
+<div class="gate" id="gate">
+  <div class="door door-left" id="doorLeft"><div class="handle handle-left"></div></div>
+  <div class="door door-right" id="doorRight"><div class="handle handle-right"></div></div>
+  <div class="seam" id="seam"></div>
+  <div class="boot" id="boot">
+    <div class="boot-name">Abhishek Kumar</div>
+    <div class="terminal">
+      <div class="terminal-dots"><span></span><span></span><span></span></div>
+      <div class="boot-lines" id="bootLines"></div>
+    </div>
+    <button type="button" class="enter-btn" id="enterBtn">Enter my home</button>
+    <div class="press-hint">press to open the gate</div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page" id="page">
+
+  <nav class="nav">
+    <div class="nav-brand"><span class="nav-dot"></span>abhishek@home<span style="color:var(--text-faint);">:~$</span></div>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+      <button type="button" class="replay-btn" id="replayBtn">&#8630; replay entry</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-glow-a"></div>
+    <div class="hero-glow-b"></div>
+    <div class="hero-scan"></div>
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">&gt; welcome home<span class="cursor">_</span></div>
+        <h1>Abhishek Kumar</h1>
+        <div class="hero-role">DevOps Engineer &middot; Cloud Infrastructure &middot; AWS &middot; Linux &middot; IaC</div>
+        <p class="hero-desc">You just walked into the place where I keep my infrastructure. Everything here I built and shipped end to end — environments provisioned from scratch with OpenTofu, deployments automated through GitHub Actions, declarative NixOS servers managed with Colmena.</p>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-value">2</div><div class="stat-label">production apps shipped</div></div>
+          <div class="stat"><div class="stat-value">100%</div><div class="stat-label">infra as code</div></div>
+          <div class="stat"><div class="stat-value">AWS</div><div class="stat-label">certified practitioner</div></div>
+        </div>
+        <div class="hero-actions">
+          <a href="mailto:abhishekkrofficial0@gmail.com" class="btn-primary">Email me</a>
+          <a href="https://linkedin.com/in/abhishek-kumar-00144b345" target="_blank" rel="noopener" class="btn-secondary">LinkedIn</a>
+          <span class="hero-location">Faridabad, Haryana, India</span>
+        </div>
+      </div>
+
+      <div class="stack-wrap">
+        <div class="stack">
+          <div class="layer-card layer-os">
+            <div class="layer-tag">OS LAYER</div>
+            <div class="layer-body">Linux &middot; NixOS declarative config</div>
+          </div>
+          <div class="layer-card layer-pipeline">
+            <div class="layer-tag">PIPELINE LAYER</div>
+            <div class="layer-body">GitHub Actions &rarr; CI/CD</div>
+          </div>
+          <div class="layer-card layer-infra">
+            <div class="layer-dots"><span></span><span></span><span></span></div>
+            <div class="layer-tag">INFRA LAYER &middot; LIVE</div>
+            <div class="layer-body">OpenTofu &middot; NixOS &middot; Colmena</div>
+            <canvas id="metrics-canvas"></canvas>
+            <div class="layer-cmd">$ colmena apply --on @prod<span class="cursor">_</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">01 &middot; About</div>
+    <div class="about-grid">
+      <p class="about-text">Deployed a production application and supported it live across Linux, IAM, DNS, and networking. AWS Certified Cloud Practitioner with hands-on AWS, Linux administration, NATS messaging, and cloud cost optimization. Seeking a DevOps, Cloud, or SRE role centered on infrastructure automation and reliability.</p>
+      <div class="iso-wrap">
+        <div class="iso-stack">
+          <div class="iso-layer" style="background:oklch(0.78 0.17 195);transform:translateZ(174px);">
+            <div class="iso-label" style="color:oklch(0.78 0.17 195);">APP</div>
+          </div>
+          <div class="iso-layer" style="background:oklch(0.73 0.18 220);transform:translateZ(116px);">
+            <div class="iso-label" style="color:oklch(0.73 0.18 220);">PIPELINE</div>
+          </div>
+          <div class="iso-layer" style="background:oklch(0.68 0.19 250);transform:translateZ(58px);">
+            <div class="iso-label" style="color:oklch(0.68 0.19 250);">INFRA</div>
+          </div>
+          <div class="iso-layer" style="background:oklch(0.63 0.2 280);transform:translateZ(0px);">
+            <div class="iso-label" style="color:oklch(0.63 0.2 280);">OS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">02 &middot; Skills</div>
+    <div class="skills-grid" id="skillsGrid"></div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">03 &middot; Experience</div>
+    <div class="exp-list" id="expList"></div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">04 &middot; Projects</div>
+    <div class="project-list" id="projectList"></div>
+  </section>
+
+  <!-- EDUCATION & CERTS -->
+  <section>
+    <div class="section-label">05 &middot; Education &amp; Certifications</div>
+    <div class="edu-grid">
+      <div>
+        <div class="edu-title">B.Tech, Electronics &amp; Communication Engineering</div>
+        <div class="edu-sub">Echelon Institute of Technology &middot; 2025</div>
+      </div>
+      <div>
+        <div class="edu-title">AWS Certified Cloud Practitioner</div>
+        <div class="edu-sub">AWS re/Start Program, Tech Mahindra Foundation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="section-label">06 &middot; Contact</div>
+    <h2>Thanks for visiting. Let's build reliable infrastructure together.</h2>
+    <p>Open to DevOps, Cloud, and SRE roles.</p>
+    <div class="contact-actions">
+      <a href="mailto:abhishekkrofficial0@gmail.com" class="btn-primary">abhishekkrofficial0@gmail.com</a>
+      <a href="https://linkedin.com/in/abhishek-kumar-00144b345" target="_blank" rel="noopener" class="btn-secondary">linkedin.com/in/abhishek-kumar</a>
+    </div>
+    <div class="footer-note">&copy; 2026 Abhishek Kumar &middot; you are now leaving the gate</div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var skillGroups = [
+    { title: 'Cloud Platforms', items: ['AWS EC2', 'IAM', 'VPC', 'S3', 'CloudWatch', 'CloudFront', 'Azure'] },
+    { title: 'Infrastructure as Code', items: ['OpenTofu', 'Terraform', 'Colmena', 'NixOS'] },
+    { title: 'CI/CD & Automation', items: ['GitHub Actions', 'Git', 'Shell Scripting', 'Deployment Pipelines'] },
+    { title: 'Messaging & Integration', items: ['NATS', 'Event-Driven Messaging', 'Service Integration'] },
+    { title: 'Operating Systems', items: ['Linux', 'Ubuntu', 'Amazon Linux', 'NixOS'] },
+    { title: 'Networking & Security', items: ['VPC', 'IAM', 'DNS', 'Security Groups', 'SSH'] },
+    { title: 'Web & Infrastructure', items: ['Nginx', 'Apache', 'CloudFront', 'Reverse Proxy'] },
+    { title: 'Monitoring & Practices', items: ['CloudWatch', 'Cloud Cost Optimization', 'Incident Troubleshooting'] }
+  ];
+
+  var experience = [
+    {
+      period: 'Apr 2026 — Jul 2026',
+      role: 'DevOps Engineer',
+      company: 'iHIVA',
+      bullets: [
+        'Designed and provisioned production infrastructure from scratch using OpenTofu, establishing Infrastructure as Code as the standard for reproducible, version-controlled deployments.',
+        'Managed production servers declaratively with NixOS and Colmena, enabling repeatable configuration and consistent rollouts across the fleet.',
+        'Built and maintained GitHub Actions CI/CD pipelines, replacing manual deployment steps and reducing the time and error rate of shipping to production.',
+        'Built the NATS event-driven messaging layer and CI pipeline for IRO, partnering with backend developers to debug service-to-service communication failures.',
+        'Deployed iWAP, the company’s weighbridge application, to production and owned post-release support across Linux servers, IAM, DNS, and networking.',
+        'Contributed to cloud cost optimization by right-sizing resources and eliminating unused infrastructure.'
+      ]
+    },
+    {
+      period: 'Feb 2026 — Mar 2026',
+      role: 'Cloud Engineer',
+      company: 'Alactic Inc.',
+      bullets: [
+        'Provisioned and configured AWS and Azure resources including EC2 instances, IAM roles and policies, VPC networking, and Linux servers.',
+        'Supported production deployments and cloud operations, diagnosing and resolving infrastructure and connectivity issues.'
+      ]
+    }
+  ];
+
+  var projects = [
+    {
+      name: 'iWAP',
+      subtitle: 'iHIVA Weighbridge Application — production deployment',
+      bullets: [
+        'Architected and deployed the production environment for a monolithic weighbridge application: OpenTofu-provisioned AWS infrastructure and NixOS servers managed with Colmena.',
+        'Automated the full build-and-deploy path with GitHub Actions, taking the release from a manual process to a single pipeline run, then supported it live post-launch.'
+      ]
+    },
+    {
+      name: 'IRO',
+      subtitle: 'iHIVA Revenue Officer — messaging & CI',
+      bullets: [
+        'Built the NATS event-driven messaging layer connecting distributed services, and implemented the GitHub Actions CI pipeline for automated build and test.'
+      ]
+    },
+    {
+      name: 'Cyson.in',
+      subtitle: 'Full-stack deployment',
+      bullets: [
+        'Deployed and connected a full-stack application with the frontend on Hostinger and backend on Railway, configuring DNS records, environment variables, and production connectivity.'
+      ]
+    }
+  ];
+
+  function el(tag, className, html){
+    var e = document.createElement(tag);
+    if (className) e.className = className;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  function renderSkills(){
+    var grid = document.getElementById('skillsGrid');
+    skillGroups.forEach(function(grp){
+      var card = el('div', 'skill-card');
+      card.appendChild(el('div', 'skill-title', grp.title));
+      var tags = el('div', 'skill-tags');
+      grp.items.forEach(function(item){ tags.appendChild(el('span', 'skill-tag', item)); });
+      card.appendChild(tags);
+      grid.appendChild(card);
+    });
+  }
+
+  function bulletsList(items){
+    var wrap = el('div', 'bullets');
+    items.forEach(function(b){
+      var row = el('div', 'bullet');
+      row.appendChild(el('span', 'bullet-mark', '&#9656;'));
+      row.appendChild(el('span', null, b));
+      wrap.appendChild(row);
+    });
+    return wrap;
+  }
+
+  function renderExperience(){
+    var list = document.getElementById('expList');
+    experience.forEach(function(job){
+      var row = el('div', 'exp-row');
+      row.appendChild(el('div', 'exp-period', job.period));
+      var right = el('div');
+      right.appendChild(el('div', 'exp-role', job.role));
+      right.appendChild(el('div', 'exp-company', job.company));
+      right.appendChild(bulletsList(job.bullets));
+      row.appendChild(right);
+      list.appendChild(row);
+    });
+  }
+
+  function renderProjects(){
+    var list = document.getElementById('projectList');
+    projects.forEach(function(proj){
+      var card = el('div', 'project-card');
+      var head = el('div', 'project-head');
+      head.appendChild(el('div', 'project-name', proj.name));
+      head.appendChild(el('div', 'project-sub', proj.subtitle));
+      card.appendChild(head);
+      var bl = bulletsList(proj.bullets);
+      bl.className = 'project-bullets';
+      card.appendChild(bl);
+      list.appendChild(card);
+    });
+  }
+
+  renderSkills();
+  renderExperience();
+  renderProjects();
+
+  /* ---------- GATE BOOT SEQUENCE ---------- */
+  var bootLines = [
+    { text: '$ ssh abhishek@home.infra', color: 'oklch(0.9 0.006 262)' },
+    { text: 'authenticating ed25519 key … OK', color: 'oklch(0.7 0.02 262)' },
+    { text: 'mounting /about /skills /experience /projects', color: 'oklch(0.7 0.02 262)' },
+    { text: 'tunnel established · rtt 12ms · 0 drift', color: 'oklch(0.7 0.02 262)' },
+    { text: 'ACCESS GRANTED — opening the gate', color: 'oklch(0.82 0.17 195)' }
+  ];
+
+  var gate = document.getElementById('gate');
+  var page = document.getElementById('page');
+  var bootLinesEl = document.getElementById('bootLines');
+  var enterBtn = document.getElementById('enterBtn');
+  var replayBtn = document.getElementById('replayBtn');
+  var bootTimer = null;
+  var gateTimer = null;
+  var entered = false;
+
+  function startBoot(){
+    clearInterval(bootTimer);
+    bootLinesEl.innerHTML = '';
+    var i = 0;
+    bootTimer = setInterval(function(){
+      if (i >= bootLines.length){
+        clearInterval(bootTimer);
+        var cur = el('span', 'cursor', '_');
+        bootLinesEl.appendChild(cur);
+        enterBtn.classList.add('ready');
+        return;
+      }
+      var line = bootLines[i];
+      var d = el('div', 'boot-line', line.text);
+      d.style.color = line.color;
+      bootLinesEl.appendChild(d);
+      i++;
+    }, 480);
+  }
+
+  function enterHome(){
+    if (entered) return;
+    entered = true;
+    document.body.style.overflow = '';
+    gate.classList.add('entered');
+    page.classList.add('entered');
+    clearTimeout(gateTimer);
+    gateTimer = setTimeout(function(){ gate.classList.add('gone'); }, 2300);
+  }
+
+  function replay(){
+    clearTimeout(gateTimer);
+    window.scrollTo(0, 0);
+    document.body.style.overflow = 'hidden';
+    entered = false;
+    gate.classList.remove('gone');
+    gate.classList.remove('entered');
+    page.classList.remove('entered');
+    enterBtn.classList.remove('ready');
+    startBoot();
+  }
+
+  enterBtn.addEventListener('click', enterHome);
+  replayBtn.addEventListener('click', replay);
+
+  document.body.style.overflow = 'hidden';
+  startBoot();
+
+  /* ---------- TUNNEL BACKGROUND ---------- */
+  (function tunnel(){
+    var c = document.getElementById('bg-tunnel');
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    var w = 0, h = 0;
+    function onResize(){
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = c.clientWidth; h = c.clientHeight;
+      c.width = Math.max(1, w * dpr); c.height = Math.max(1, h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    c.style.width = '100%'; c.style.height = '100%';
+    onResize();
+    window.addEventListener('resize', onResize);
+
+    var N = 24;
+    var motes = Array.from({ length: 70 }, function(){
+      return { x: Math.random(), y: Math.random(), z: Math.random() * 0.9 + 0.1, s: Math.random() * 0.5 + 0.4 };
+    });
+    var t = 0;
+
+    function draw(){
+      t += 0.0055;
+      ctx.clearRect(0, 0, w, h);
+      var cx = w / 2, cy = h / 2, off = (t * 9) % 1;
+
+      for (var k = 1; k <= N; k++) {
+        var z = k - off;
+        var d = 210 / z;
+        var a = Math.max(0, 0.42 * (1 - z / N));
+        ctx.strokeStyle = 'rgba(120, 224, 255, ' + a.toFixed(3) + ')';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, cy + d); ctx.lineTo(w, cy + d); ctx.stroke();
+        ctx.strokeStyle = 'rgba(178, 150, 255, ' + (a * 0.75).toFixed(3) + ')';
+        ctx.beginPath(); ctx.moveTo(0, cy - d); ctx.lineTo(w, cy - d); ctx.stroke();
+      }
+
+      var near = 210 / (1 - off + 0.0001), far = 210 / N;
+      for (var i = -12; i <= 12; i++) {
+        if (i === 0) continue;
+        var spread = i * (w / 12);
+        ctx.strokeStyle = 'rgba(120, 224, 255, 0.09)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(cx + spread, cy + near); ctx.lineTo(cx + spread * 0.06, cy + far); ctx.stroke();
+        ctx.strokeStyle = 'rgba(178, 150, 255, 0.07)';
+        ctx.beginPath();
+        ctx.moveTo(cx + spread, cy - near); ctx.lineTo(cx + spread * 0.06, cy - far); ctx.stroke();
+      }
+
+      motes.forEach(function(m){
+        m.z -= 0.0022;
+        if (m.z <= 0.06) { m.z = 1; m.x = Math.random(); m.y = Math.random(); }
+        var px = cx + (m.x - 0.5) * w / m.z * 0.9;
+        var py = cy + (m.y - 0.5) * h / m.z * 0.9;
+        if (px < -20 || px > w + 20 || py < -20 || py > h + 20) return;
+        var r = Math.max(0.4, m.s / m.z * 0.9);
+        ctx.fillStyle = 'rgba(190, 240, 255, ' + (0.5 * (1 - m.z)).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2); ctx.fill();
+      });
+
+      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.22);
+      g.addColorStop(0, 'rgba(140, 230, 255, 0.22)');
+      g.addColorStop(1, 'rgba(140, 230, 255, 0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ---------- METRICS SPARKLINE ---------- */
+  (function metrics(){
+    var c = document.getElementById('metrics-canvas');
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var series = Array.from({ length: 60 }, function(){ return 0.4 + Math.random() * 0.2; });
+    var frame = 0;
+    function draw(){
+      var w = c.clientWidth, h = c.clientHeight;
+      if (c.width !== w * dpr || c.height !== h * dpr) {
+        c.width = Math.max(1, w * dpr); c.height = Math.max(1, h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      if (frame++ % 4 === 0) {
+        var last = series[series.length - 1];
+        var next = last + (Math.random() - 0.5) * 0.22;
+        if (Math.random() < 0.04) next += 0.3;
+        series = series.slice(1).concat(Math.min(0.95, Math.max(0.08, next)));
+      }
+      ctx.clearRect(0, 0, w, h);
+      var step = w / (series.length - 1);
+      ctx.beginPath();
+      series.forEach(function(v, i){ var x = i * step, y = h - v * h; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+      var grad = ctx.createLinearGradient(0, 0, w, 0);
+      grad.addColorStop(0, 'rgba(120, 224, 255, 0.35)');
+      grad.addColorStop(1, 'rgba(190, 150, 255, 1)');
+      ctx.strokeStyle = grad; ctx.lineWidth = 1.6; ctx.stroke();
+      ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+      var fill = ctx.createLinearGradient(0, 0, 0, h);
+      fill.addColorStop(0, 'rgba(140, 230, 255, 0.22)');
+      fill.addColorStop(1, 'rgba(140, 230, 255, 0)');
+      ctx.fillStyle = fill; ctx.fill();
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+})();
+</script>
+</body>
+</html>
