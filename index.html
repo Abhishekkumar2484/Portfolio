@@ -125,8 +125,9 @@
   .hero-location{font-size:13px;color:var(--text-faint);margin-left:8px;}
 
   /* HERO 3D STACK */
-  .stack-wrap{perspective:1400px;}
-  .stack{position:relative;height:440px;transform:rotateX(8deg) rotateY(-14deg);transform-style:preserve-3d;}
+  .stack-wrap{perspective:1400px;cursor:grab;touch-action:none;}
+  .stack-wrap.dragging{cursor:grabbing;}
+  .stack{position:relative;height:440px;transform:rotateX(8deg) rotateY(-14deg);transform-style:preserve-3d;will-change:transform;}
   .layer-card{position:absolute;top:0;left:0;background:oklch(0.2 0.025 262 / 0.55);backdrop-filter:blur(6px);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;justify-content:flex-end;}
   .layer-os{width:78%;height:52%;transform:translate3d(130px,206px,-90px);border:1px solid oklch(0.65 0.2 300 / 0.35);box-shadow:0 30px 60px -20px oklch(0.02 0 0 / 0.7), 0 0 30px -8px oklch(0.65 0.2 300 / 0.4);}
   .layer-pipeline{width:82%;height:56%;transform:translate3d(70px,110px,-45px);background:oklch(0.22 0.025 262 / 0.6);border:1px solid oklch(0.78 0.17 195 / 0.35);box-shadow:0 30px 60px -18px oklch(0.02 0 0 / 0.7), 0 0 30px -8px oklch(0.78 0.17 195 / 0.4);padding:20px 22px;}
@@ -276,8 +277,8 @@
         </div>
       </div>
 
-      <div class="stack-wrap">
-        <div class="stack">
+      <div class="stack-wrap" id="stackWrap">
+        <div class="stack" id="heroStack">
           <div class="layer-card layer-os">
             <div class="layer-tag">OS LAYER</div>
             <div class="layer-body">Linux &middot; NixOS declarative config</div>
@@ -672,6 +673,64 @@
       requestAnimationFrame(draw);
     }
     draw();
+  })();
+
+  /* ---------- HERO STACK DRAG TO ROTATE ---------- */
+  (function stackDrag(){
+    var wrap = document.getElementById('stackWrap');
+    var stack = document.getElementById('heroStack');
+    if (!wrap || !stack) return;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var BASE_X = 8, BASE_Y = -14;
+    var MIN_X = -20, MAX_X = 45;
+    var MIN_Y = -70, MAX_Y = 40;
+    var DEG_PER_PX = 0.25;
+    var targetX = BASE_X, targetY = BASE_Y;
+    var curX = BASE_X, curY = BASE_Y;
+    var dragging = false;
+    var startClientX = 0, startClientY = 0, startRotX = BASE_X, startRotY = BASE_Y;
+
+    function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+    function onPointerDown(e){
+      dragging = true;
+      startClientX = e.clientX;
+      startClientY = e.clientY;
+      startRotX = targetX;
+      startRotY = targetY;
+      wrap.setPointerCapture(e.pointerId);
+      wrap.classList.add('dragging');
+    }
+
+    function onPointerMove(e){
+      if (!dragging) return;
+      var dx = e.clientX - startClientX;
+      var dy = e.clientY - startClientY;
+      targetY = clamp(startRotY + dx * DEG_PER_PX, MIN_Y, MAX_Y);
+      targetX = clamp(startRotX - dy * DEG_PER_PX, MIN_X, MAX_X);
+    }
+
+    function onPointerUp(e){
+      if (!dragging) return;
+      dragging = false;
+      wrap.releasePointerCapture(e.pointerId);
+      wrap.classList.remove('dragging');
+    }
+
+    function tick(){
+      var ease = dragging ? 0.35 : 0.08;
+      curX += (targetX - curX) * ease;
+      curY += (targetY - curY) * ease;
+      stack.style.transform = 'rotateX(' + curX.toFixed(2) + 'deg) rotateY(' + curY.toFixed(2) + 'deg)';
+      requestAnimationFrame(tick);
+    }
+
+    wrap.addEventListener('pointerdown', onPointerDown);
+    wrap.addEventListener('pointermove', onPointerMove);
+    wrap.addEventListener('pointerup', onPointerUp);
+    wrap.addEventListener('pointercancel', onPointerUp);
+    if (!reduceMotion) tick();
   })();
 
 })();
